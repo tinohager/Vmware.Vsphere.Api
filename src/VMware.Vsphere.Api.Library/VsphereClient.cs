@@ -153,6 +153,22 @@ namespace VMware.Vsphere.Api.Library
                         Count = 2,
                         HotAddEnabled = true
                     },
+                    Disks = new Disk []
+                    {
+                        new Disk
+                        {
+                            Scsi = new Scsi
+                            {
+                                bus = 0,
+                                unit = 0,
+                            },
+                            Type = "SCSI",
+                            NewVmdk = new NewVmdk
+                            {
+                                Capacity = 37179869184
+                            }
+                        }
+                    },
                     Cdroms = new Cdrom[]
                     {
                         new Cdrom

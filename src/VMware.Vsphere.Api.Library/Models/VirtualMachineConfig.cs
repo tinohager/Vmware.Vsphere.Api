@@ -116,10 +116,10 @@ namespace VMware.Vsphere.Api.Library.Models
     {
         public Backing1 backing { get; set; }
         public Ide1 ide { get; set; }
-        public New_Vmdk new_vmdk { get; set; }
+        public NewVmdk NewVmdk { get; set; }
         public Sata1 sata { get; set; }
-        public Scsi scsi { get; set; }
-        public string type { get; set; }
+        public Scsi Scsi { get; set; }
+        public string Type { get; set; }
     }
 
     public class Backing1
@@ -134,9 +134,9 @@ namespace VMware.Vsphere.Api.Library.Models
         public bool primary { get; set; }
     }
 
-    public class New_Vmdk
+    public class NewVmdk
     {
-        public int capacity { get; set; }
+        public long Capacity { get; set; }
         public string name { get; set; }
         public Storage_Policy1 storage_policy { get; set; }
     }
