@@ -18,8 +18,8 @@ var virtualMachineConfig = new SimpleVirtualMachineConfig
 	Cpus = 2,
 	DiskSizeGB = 40,
 	MemorySizeGB = 4,
-	NetworkName = "NetworkName",
-	IsoFile = "[Raid-ESX2] ISO/ubuntu-20.04.1-live-server-amd64.iso",
+	NetworkName = "VM Network",
+	IsoFile = "[MyIsoDatastoreName] ISO/ubuntu-20.04.1-live-server-amd64.iso",
 };
 
 await client.CreateVirtualMachineAsync(esxDatastoreName, esxHostName, virtualMachineConfig);
