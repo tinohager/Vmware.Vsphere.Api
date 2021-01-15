@@ -26,7 +26,7 @@ namespace VMware.Vsphere.Api.Library
             {
                 ContractResolver = contractResolver,
                 Formatting = Formatting.Indented,
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
             };
 
             var httpClientHandler = new HttpClientHandler();
@@ -145,12 +145,52 @@ namespace VMware.Vsphere.Api.Library
             {
                 Spec = new Spec
                 {
-                    GuestOs = "OTHER",
+                    //Name = "Test-Linux",
+                    GuestOs = GuestOs.UBUNTU_64,
                     Cpu = new Cpu
                     {
                         CoresPerSocket = 2,
                         Count = 2,
                         HotAddEnabled = true
+                    },
+                    Cdroms = new Cdrom[]
+                    {
+                        new Cdrom
+                        {
+                            StartConnected = true,
+                            AllowGuestControl = true,
+                            Type = "SATA",
+                            Sata = new Sata
+                            {
+                                Bus = 0,
+                                Unit = 0
+                            },
+                            Backing = new Backing
+                            {
+                                Type = "ISO_FILE",
+                                IsoFile = "[Raid-ESX2] ISO/ubuntu-20.04.1-live-server-amd64.iso",
+                            }
+                        }
+                    },
+                    Memory = new Memory
+                    {
+                        SizeMiB = 3072
+                    },
+                    Nics = new Nic[]
+                    {
+                        new Nic
+                        {
+                            Type = "VMXNET3",
+                            StartConnected = true,
+                            AllowGuestControl = true,
+                            MacType = "GENERATED",
+                            Backing = new Backing3
+                            {
+                                Network = "network-13",
+                                NetworkName = "My Network Intern",
+                                Type = "STANDARD_PORTGROUP"
+                            }
+                        }
                     },
                     Placement = new Placement
                     {
@@ -164,14 +204,15 @@ namespace VMware.Vsphere.Api.Library
             var json = JsonConvert.SerializeObject(virtualMachineConfig, this._jsonSerializerSettings);
 
             var responseMessage = await this._httpClient.PostAsync($"vcenter/vm", new StringContent(json, Encoding.UTF8, "application/json"), cancellationToken);
+            json = await responseMessage.Content.ReadAsStringAsync();
+
             if (!responseMessage.IsSuccessStatusCode)
             {
+                Console.WriteLine(json);
                 return null;
             }
-
-            json = await responseMessage.Content.ReadAsStringAsync();
+           
             var item = JsonConvert.DeserializeObject<CreateVirtualMachineResponse>(json, this._jsonSerializerSettings);
-
             return item;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace VMware.Vsphere.Api.Library.Models
 {
@@ -16,7 +17,8 @@ namespace VMware.Vsphere.Api.Library.Models
         public Disk[] Disks { get; set; }
         public Floppy[] Floppies { get; set; }
         [JsonProperty("guest_OS")]
-        public string GuestOs { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public GuestOs GuestOs { get; set; }
         public string HardwareVersion { get; set; }
         public Memory Memory { get; set; }
         public string Name { get; set; }
@@ -82,20 +84,20 @@ namespace VMware.Vsphere.Api.Library.Models
 
     public class Cdrom
     {
-        public bool allow_guest_control { get; set; }
-        public Backing backing { get; set; }
+        public bool AllowGuestControl { get; set; }
+        public Backing Backing { get; set; }
         public Ide ide { get; set; }
-        public Sata sata { get; set; }
-        public bool start_connected { get; set; }
-        public string type { get; set; }
+        public Sata Sata { get; set; }
+        public bool StartConnected { get; set; }
+        public string Type { get; set; }
     }
 
     public class Backing
     {
-        public string device_access_type { get; set; }
+        public string DeviceAccessType { get; set; }
         public string host_device { get; set; }
-        public string iso_file { get; set; }
-        public string type { get; set; }
+        public string IsoFile { get; set; }
+        public string Type { get; set; }
     }
 
     public class Ide
@@ -106,8 +108,8 @@ namespace VMware.Vsphere.Api.Library.Models
 
     public class Sata
     {
-        public int bus { get; set; }
-        public int unit { get; set; }
+        public int Bus { get; set; }
+        public int Unit { get; set; }
     }
 
     public class Disk
@@ -172,22 +174,23 @@ namespace VMware.Vsphere.Api.Library.Models
 
     public class Nic
     {
-        public bool allow_guest_control { get; set; }
-        public Backing3 backing { get; set; }
-        public string mac_address { get; set; }
-        public string mac_type { get; set; }
-        public int pci_slot_number { get; set; }
-        public bool start_connected { get; set; }
-        public string type { get; set; }
-        public bool upt_compatibility_enabled { get; set; }
-        public bool wake_on_lan_enabled { get; set; }
+        public bool AllowGuestControl { get; set; }
+        public Backing3 Backing { get; set; }
+        public string MacAddress { get; set; }
+        public string MacType { get; set; }
+        public int PciSlotNumber { get; set; }
+        public bool StartConnected { get; set; }
+        public string Type { get; set; }
+        public bool UptCompatibilityEnabled { get; set; }
+        public bool WakeOnLanEnabled { get; set; }
     }
 
     public class Backing3
     {
         public string distributed_port { get; set; }
-        public string network { get; set; }
-        public string type { get; set; }
+        public string Network { get; set; }
+        public string NetworkName { get; set; }
+        public string Type { get; set; }
     }
 
     public class Parallel_Ports
