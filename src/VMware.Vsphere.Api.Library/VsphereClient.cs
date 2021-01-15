@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using VMware.Vsphere.Api.Library.Models;
+using VMware.Vsphere.Api.Library.Models.VirtualMachineConfigs;
 
 namespace VMware.Vsphere.Api.Library
 {
@@ -159,8 +160,8 @@ namespace VMware.Vsphere.Api.Library
                         {
                             Scsi = new Scsi
                             {
-                                bus = 0,
-                                unit = 0,
+                                Bus = 0,
+                                Unit = 0,
                             },
                             Type = "SCSI",
                             NewVmdk = new NewVmdk
@@ -181,7 +182,7 @@ namespace VMware.Vsphere.Api.Library
                                 Bus = 0,
                                 Unit = 0
                             },
-                            Backing = new Backing
+                            Backing = new CdromBacking
                             {
                                 Type = "ISO_FILE",
                                 IsoFile = "[Raid-ESX2] ISO/ubuntu-20.04.1-live-server-amd64.iso",
@@ -196,13 +197,12 @@ namespace VMware.Vsphere.Api.Library
                     {
                         new Nic
                         {
-                            Type = "VMXNET3",
+                            Type = EthernetAdapterEmulationType.VMXNET3,
+                            MacType = MacAddressType.GENERATED,
                             StartConnected = true,
                             AllowGuestControl = true,
-                            MacType = "GENERATED",
-                            Backing = new Backing3
+                            Backing = new NicBacking
                             {
-                                Network = "network-13",
                                 NetworkName = "My Network Intern",
                                 Type = "STANDARD_PORTGROUP"
                             }
