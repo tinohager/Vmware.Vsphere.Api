@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace VMware.Vsphere.Api.Library
+namespace Vmware.Vsphere.Api.Library
 {
     public class LoggingHandler : DelegatingHandler
     {

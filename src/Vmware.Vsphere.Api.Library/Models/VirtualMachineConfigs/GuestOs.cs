@@ -1,7 +1,7 @@
 ﻿/// <summary>
 /// https://vmware.github.io/vsphere-automation-sdk-java/vsphere/7.0.0.1/vsphereautomation-client-sdk/com/vmware/vcenter/vm/GuestOS.html
 /// </summary>
-namespace VMware.Vsphere.Api.Library.Models.VirtualMachineConfigs
+namespace Vmware.Vsphere.Api.Library.Models.VirtualMachineConfigs
 {
     public enum GuestOs
     {

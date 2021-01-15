@@ -1,4 +1,4 @@
-﻿namespace VMware.Vsphere.Api.Library.Models.VirtualMachineConfigs
+﻿namespace Vmware.Vsphere.Api.Library.Models.VirtualMachineConfigs
 {
     public class Placement
     {

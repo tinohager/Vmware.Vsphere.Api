@@ -1,6 +1,6 @@
-﻿using VMware.Vsphere.Api.Library.Models.VirtualMachineConfigs;
+﻿using Vmware.Vsphere.Api.Library.Models.VirtualMachineConfigs;
 
-namespace VMware.Vsphere.Api.Library.Models
+namespace Vmware.Vsphere.Api.Library.Models
 {
     public class VirtualMachineConfig
     {

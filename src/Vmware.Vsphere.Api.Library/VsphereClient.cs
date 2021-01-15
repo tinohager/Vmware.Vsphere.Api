@@ -6,10 +6,10 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using VMware.Vsphere.Api.Library.Models;
-using VMware.Vsphere.Api.Library.Models.VirtualMachineConfigs;
+using Vmware.Vsphere.Api.Library.Models;
+using Vmware.Vsphere.Api.Library.Models.VirtualMachineConfigs;
 
-namespace VMware.Vsphere.Api.Library
+namespace Vmware.Vsphere.Api.Library
 {
     public class VsphereClient
     {

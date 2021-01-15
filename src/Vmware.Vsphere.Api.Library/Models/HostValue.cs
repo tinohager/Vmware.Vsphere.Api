@@ -1,4 +1,4 @@
-﻿namespace VMware.Vsphere.Api.Library.Models
+﻿namespace Vmware.Vsphere.Api.Library.Models
 {
     public class HostValue
     {

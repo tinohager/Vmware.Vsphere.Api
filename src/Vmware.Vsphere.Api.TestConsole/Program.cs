@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using VMware.Vsphere.Api.Library;
+using Vmware.Vsphere.Api.Library;
 
-namespace VMware.Vsphere.Api.TestConsole
+namespace Vmware.Vsphere.Api.TestConsole
 {
     class Program
     {

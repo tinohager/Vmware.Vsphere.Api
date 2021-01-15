@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VMware.Vsphere.Api.Library\VMware.Vsphere.Api.Library.csproj" />
+    <ProjectReference Include="..\Vmware.Vsphere.Api.Library\Vmware.Vsphere.Api.Library.csproj" />
   </ItemGroup>
 
 </Project>
