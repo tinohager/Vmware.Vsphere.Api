@@ -71,7 +71,7 @@ namespace Vmware.Vsphere.Api.Library
             return responseMessage.IsSuccessStatusCode;
         }
 
-        private async Task<string> GetFolderAsync(CancellationToken cancellationToken = default)
+        public async Task<string> GetFolderAsync(CancellationToken cancellationToken = default)
         {
             var responseMessage = await this._httpClient.GetAsync($"vcenter/folder?filter.type=VIRTUAL_MACHINE", cancellationToken);
             if (!responseMessage.IsSuccessStatusCode)
@@ -90,7 +90,7 @@ namespace Vmware.Vsphere.Api.Library
             return item.Value[0].Folder;
         }
 
-        private async Task<string> GetDatastoreAsync(string datastore, CancellationToken cancellationToken = default)
+        public async Task<string> GetDatastoreAsync(string datastore, CancellationToken cancellationToken = default)
         {
             var responseMessage = await this._httpClient.GetAsync($"vcenter/datastore?filter.names={datastore}", cancellationToken);
             if (!responseMessage.IsSuccessStatusCode)
@@ -128,9 +128,11 @@ namespace Vmware.Vsphere.Api.Library
             return item.Value[0].Host;
         }
 
+
         public async Task<CreateVirtualMachineResponse> CreateVirtualMachineAsync(
-            string datastoreName,
-            string hostName,
+            string esxDatastoreName,
+            string esxHostName,
+            SimpleVirtualMachineConfig simpleVirtualMachineConfig,
             CancellationToken cancellationToken = default)
         {
             var folder = await this.GetFolderAsync(cancellationToken);
@@ -139,22 +141,22 @@ namespace Vmware.Vsphere.Api.Library
                 return null;
             }
 
-            var datastore = await this.GetDatastoreAsync(datastoreName, cancellationToken);
-            var host = await this.GetHostAsync(hostName, cancellationToken);
+            var datastore = await this.GetDatastoreAsync(esxDatastoreName, cancellationToken);
+            var host = await this.GetHostAsync(esxHostName, cancellationToken);
 
             var virtualMachineConfig = new VirtualMachineConfig
             {
                 Spec = new Spec
                 {
-                    //Name = "Test-Linux",
-                    GuestOs = GuestOs.UBUNTU_64,
+                    Name = simpleVirtualMachineConfig.Name,
+                    GuestOs = simpleVirtualMachineConfig.GuestOs,
                     Cpu = new Cpu
                     {
-                        CoresPerSocket = 2,
-                        Count = 2,
+                        Count = simpleVirtualMachineConfig.Cpus,
+                        CoresPerSocket = 1,
                         HotAddEnabled = true
                     },
-                    Disks = new Disk []
+                    Disks = new Disk[]
                     {
                         new Disk
                         {
@@ -166,7 +168,7 @@ namespace Vmware.Vsphere.Api.Library
                             Type = "SCSI",
                             NewVmdk = new NewVmdk
                             {
-                                Capacity = 37179869184
+                                Capacity = simpleVirtualMachineConfig.DiskSizeGB * 1024 * 1024 * 1024
                             }
                         }
                     },
@@ -185,13 +187,13 @@ namespace Vmware.Vsphere.Api.Library
                             Backing = new CdromBacking
                             {
                                 Type = "ISO_FILE",
-                                IsoFile = "[Raid-ESX2] ISO/ubuntu-20.04.1-live-server-amd64.iso",
+                                IsoFile = simpleVirtualMachineConfig.IsoFile
                             }
                         }
                     },
                     Memory = new Memory
                     {
-                        SizeMiB = 3072
+                        SizeMiB = simpleVirtualMachineConfig.MemorySizeGB * 1024 * 1024
                     },
                     Nics = new Nic[]
                     {
@@ -203,7 +205,7 @@ namespace Vmware.Vsphere.Api.Library
                             AllowGuestControl = true,
                             Backing = new NicBacking
                             {
-                                NetworkName = "My Network Intern",
+                                NetworkName = simpleVirtualMachineConfig.NetworkName,
                                 Type = "STANDARD_PORTGROUP"
                             }
                         }
