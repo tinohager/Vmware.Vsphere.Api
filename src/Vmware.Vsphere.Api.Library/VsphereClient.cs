@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -128,6 +129,25 @@ namespace Vmware.Vsphere.Api.Library
             return item.Value[0].Host;
         }
 
+        private async Task<NetworkValue> GetNetworkAsync(string network, CancellationToken cancellationToken = default)
+        {
+            var responseMessage = await this._httpClient.GetAsync($"vcenter/network", cancellationToken);
+            if (!responseMessage.IsSuccessStatusCode)
+            {
+                return null;
+            }
+
+            var json = await responseMessage.Content.ReadAsStringAsync();
+            var item = JsonConvert.DeserializeObject<NetworkResponse>(json, this._jsonSerializerSettings);
+
+            if (item.Value.Length == 0)
+            {
+                return null;
+            }
+
+            return item.Value.Where(o => o.Name.Equals(network, StringComparison.OrdinalIgnoreCase))
+                .SingleOrDefault();
+        }
 
         public async Task<CreateVirtualMachineResponse> CreateVirtualMachineAsync(
             string esxDatastoreName,
@@ -141,8 +161,9 @@ namespace Vmware.Vsphere.Api.Library
                 return null;
             }
 
-            var datastore = await this.GetDatastoreAsync(esxDatastoreName, cancellationToken);
-            var host = await this.GetHostAsync(esxHostName, cancellationToken);
+            var esxDatastore = await this.GetDatastoreAsync(esxDatastoreName, cancellationToken);
+            var esxHost = await this.GetHostAsync(esxHostName, cancellationToken);
+            var esxNetwork = await this.GetNetworkAsync(simpleVirtualMachineConfig.NetworkName, cancellationToken);
 
             var virtualMachineConfig = new VirtualMachineConfig
             {
@@ -168,7 +189,7 @@ namespace Vmware.Vsphere.Api.Library
                             Type = "SCSI",
                             NewVmdk = new NewVmdk
                             {
-                                Capacity = simpleVirtualMachineConfig.DiskSizeGB * 1024 * 1024 * 1024
+                                Capacity = simpleVirtualMachineConfig.DiskSizeGB * 1024L * 1024L * 1024L
                             }
                         }
                     },
@@ -193,7 +214,7 @@ namespace Vmware.Vsphere.Api.Library
                     },
                     Memory = new Memory
                     {
-                        SizeMiB = simpleVirtualMachineConfig.MemorySizeGB * 1024 * 1024
+                        SizeMiB = simpleVirtualMachineConfig.MemorySizeGB * 1024
                     },
                     Nics = new Nic[]
                     {
@@ -205,16 +226,16 @@ namespace Vmware.Vsphere.Api.Library
                             AllowGuestControl = true,
                             Backing = new NicBacking
                             {
-                                NetworkName = simpleVirtualMachineConfig.NetworkName,
-                                Type = "STANDARD_PORTGROUP"
+                                Network = esxNetwork.Network,
+                                Type = esxNetwork.Type
                             }
                         }
                     },
                     Placement = new Placement
                     {
-                        Datastore = datastore,
+                        Datastore = esxDatastore,
                         Folder = folder,
-                        Host = host
+                        Host = esxHost
                     }
                 }
             };
