@@ -254,5 +254,19 @@ namespace Vmware.Vsphere.Api.Library
             var item = JsonConvert.DeserializeObject<CreateVirtualMachineResponse>(json, this._jsonSerializerSettings);
             return item;
         }
+
+        public async Task<bool> StartVirtualMachineAsync(string vmId, CancellationToken cancellationToken = default)
+        {
+            var responseMessage = await this._httpClient.PostAsync($"vcenter/vm/{vmId}/power/start", new StringContent("", Encoding.UTF8, "application/json"), cancellationToken);
+            var json = await responseMessage.Content.ReadAsStringAsync();
+
+            if (!responseMessage.IsSuccessStatusCode)
+            {
+                Console.WriteLine(json);
+                return false;
+            }
+
+            return true;
+        }
     }
 }
