@@ -17,6 +17,5 @@ namespace Vmware.Vsphere.Api.Library.Models
         /// e.g. `[Raid-ESX2] ISO/ubuntu-20.04.1-live-server-amd64.iso`
         /// </summary>
         public string IsoFile { get; set; }
-        public string NetworkName { get; set; }
     }
 }

@@ -150,8 +150,7 @@ namespace Vmware.Vsphere.Api.Library
         }
 
         public async Task<CreateVirtualMachineResponse> CreateVirtualMachineAsync(
-            string esxDatastoreName,
-            string esxHostName,
+            EnviormentConfig enviormentConfig,
             SimpleVirtualMachineConfig simpleVirtualMachineConfig,
             CancellationToken cancellationToken = default)
         {
@@ -161,9 +160,9 @@ namespace Vmware.Vsphere.Api.Library
                 return null;
             }
 
-            var esxDatastore = await this.GetDatastoreAsync(esxDatastoreName, cancellationToken);
-            var esxHost = await this.GetHostAsync(esxHostName, cancellationToken);
-            var esxNetwork = await this.GetNetworkAsync(simpleVirtualMachineConfig.NetworkName, cancellationToken);
+            var esxDatastore = await this.GetDatastoreAsync(enviormentConfig.DatastoreName, cancellationToken);
+            var esxHost = await this.GetHostAsync(enviormentConfig.HostName, cancellationToken);
+            var esxNetwork = await this.GetNetworkAsync(enviormentConfig.NetworkName, cancellationToken);
 
             var virtualMachineConfig = new VirtualMachineConfig
             {
